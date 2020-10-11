@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30509.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherLinkIoT", "WeatherLinkIoT\WeatherLinkIoT.csproj", "{A990362E-5D20-40D0-B5E3-72B982719EAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherLinkIoT", "WeatherLinkIoT\WeatherLinkIoT.csproj", "{A990362E-5D20-40D0-B5E3-72B982719EAE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherLinkClient", "WeatherLinkClient\WeatherLinkClient.csproj", "{456A09FA-8FBE-47BE-BF2B-6D0E360992C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{A990362E-5D20-40D0-B5E3-72B982719EAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A990362E-5D20-40D0-B5E3-72B982719EAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A990362E-5D20-40D0-B5E3-72B982719EAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{456A09FA-8FBE-47BE-BF2B-6D0E360992C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{456A09FA-8FBE-47BE-BF2B-6D0E360992C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{456A09FA-8FBE-47BE-BF2B-6D0E360992C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{456A09FA-8FBE-47BE-BF2B-6D0E360992C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
