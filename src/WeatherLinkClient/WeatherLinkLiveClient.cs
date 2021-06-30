@@ -22,7 +22,7 @@ namespace WeatherLinkClient
                 httpClient.BaseAddress = new Uri(weatherLinkBaseUrl);
 
                 var result = await httpClient.GetAsync("v1/current_conditions");
-
+                
                 var response = await result.Content.ReadAsStringAsync();
 
                 var responseData = JsonSerializer.Deserialize<CurrentConditionsResponse>(response);

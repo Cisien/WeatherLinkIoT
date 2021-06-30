@@ -19,6 +19,8 @@ namespace WeatherLinkIoT
         private readonly WeatherLinkLiveClient _wllClient;
         private readonly ILogger<WeatherIotService> _logger;
         private readonly Timer _updateTimer;
+        private decimal? _lastHumidityValue;
+        private decimal? _lastDewPtValue;
 
         public WeatherIotService(DeviceClientFactory deviceClientFactory, WeatherLinkLiveClient wllClient, ILogger<WeatherIotService> logger)
         {
@@ -30,6 +32,7 @@ namespace WeatherLinkIoT
 
         private async Task DoWeatherUpdate()
         {
+            var now = DateTime.Now;
             var currentConditions = await _wllClient.GetCurrentConditionsAsync("http://weatherlinklive.local.cisien.com");
             var mainSensor = currentConditions?.Data.Conditions.SingleOrDefault(a => a.DataStructureType == 1);
             if (mainSensor == null)
@@ -51,6 +54,16 @@ namespace WeatherLinkIoT
                 mainSensor.BarAbsolute ??= sensors.BarAbsolute;
             }
 
+            if ((mainSensor.Hum ?? 0.0m) - (_lastHumidityValue ?? 0.0m) < -2m)
+            {
+                _logger.LogInformation("Humidity value was out of expected range, using last known good value.");
+                mainSensor.Hum = _lastHumidityValue;
+                mainSensor.DewPoint = _lastDewPtValue;
+            }
+
+            _lastHumidityValue = mainSensor.Hum;
+            _lastDewPtValue = mainSensor.DewPoint;
+
             var jsonData = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(mainSensor));
 
             var message = new Message(jsonData)
@@ -68,7 +81,7 @@ namespace WeatherLinkIoT
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             _deviceClient = await _deviceClientFactory.Create();
-            _updateTimer.Change(TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(60));
+            _updateTimer.Change(TimeSpan.FromMilliseconds(0), TimeSpan.FromSeconds(60));
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
