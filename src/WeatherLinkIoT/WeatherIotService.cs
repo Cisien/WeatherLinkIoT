@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -19,8 +18,6 @@ namespace WeatherLinkIoT
         private readonly WeatherLinkLiveClient _wllClient;
         private readonly ILogger<WeatherIotService> _logger;
         private readonly Timer _updateTimer;
-        private decimal? _lastHumidityValue;
-        private decimal? _lastDewPtValue;
 
         public WeatherIotService(DeviceClientFactory deviceClientFactory, WeatherLinkLiveClient wllClient, ILogger<WeatherIotService> logger)
         {
@@ -53,16 +50,6 @@ namespace WeatherLinkIoT
                 mainSensor.BarTrend ??= sensors.BarTrend;
                 mainSensor.BarAbsolute ??= sensors.BarAbsolute;
             }
-
-            if ((mainSensor.Hum ?? 0.0m) - (_lastHumidityValue ?? 0.0m) < -2m)
-            {
-                _logger.LogInformation("Humidity value was out of expected range, using last known good value.");
-                mainSensor.Hum = _lastHumidityValue;
-                mainSensor.DewPoint = _lastDewPtValue;
-            }
-
-            _lastHumidityValue = mainSensor.Hum;
-            _lastDewPtValue = mainSensor.DewPoint;
 
             var jsonData = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(mainSensor));
 

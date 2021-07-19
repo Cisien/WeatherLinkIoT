@@ -21,6 +21,9 @@ namespace WeatherLinkClient
                 using var httpClient = _httpClientFactory.CreateClient("WeatherLinkLive");
                 httpClient.BaseAddress = new Uri(weatherLinkBaseUrl);
 
+                // let's see if pinging the API twice with a short delay, throwing away the first result allows us to clean up the data
+                _ = await httpClient.GetAsync("v1/current_conditions");
+                await Task.Delay(100);
                 var result = await httpClient.GetAsync("v1/current_conditions");
                 
                 var response = await result.Content.ReadAsStringAsync();
